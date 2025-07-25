@@ -178,19 +178,19 @@ namespace AdminPanel
 			
 			int level = GetAdminLevel(p);
 			string access;
-			if(level >= 1) access += "Round control (1)\n";
-			if(level >= 2) access += "Players control (2)\n";
-			if(level >= 3) access += "Server control (3)\n";
-			if(level >= 4) access += "Admin control (4)\n";
+			if(level >= 1) access += "回合控制 (1)\n";
+			if(level >= 2) access += "玩家控制 (2)\n";
+			if(level >= 3) access += "服务器控制 (3)\n";
+			if(level >= 4) access += "管理员控制 (4)\n";
 			
-			p.ShowDialog(DIALOG_TYPE_LIST, Dialog::Panel, "Admin panel", access, "Select", "Cancel");
+			p.ShowDialog(DIALOG_TYPE_LIST, Dialog::Panel, "管理面板", access, "选择", "取消");
 		}
 	}
 	
 	void ShowPlayer(Player src, Player dest = NULL)
 	{
 		if(dest != NULL) src.SetDialogData(dest.GetName() + "\n" + dest.GetIndex() + "\n" + dest.GetSteamID() + "\n" + dest.GetIP());
-		src.ShowDialog(DIALOG_TYPE_LIST, Dialog::PlayerPanel, "Player control", "Ban\nKick\nGive role\nGive item\nTeleport to\nTeleport to me\nSet speed\nSet model\nSet texture\nSet size" + (GetAdminLevel(src) >= 4 ? "\nSet admin access" : ""), "Select", "Cancel");
+		src.ShowDialog(DIALOG_TYPE_LIST, Dialog::PlayerPanel, "玩家控制", "封禁\n踢出\n分配身份组\n分配物品\n传送到该玩家\n传送到当前位置\n设置速度\n设置模型\n设置纹理\n设置大小" + (GetAdminLevel(src) >= 4 ? "\n设置管理员权限" : ""), "选择", "取消");
 	}
 	
 	namespace Dialog
@@ -234,95 +234,95 @@ namespace AdminPanel
 					case 0:
 					{
 						if(GetAdminLevel(GetPanelPlayer(p)) >= GetAdminLevel(p) && GetPanelPlayer(p) != p) {
-							chat.SendPlayer(p, "You can't use it on this player");
+							chat.SendPlayer(p, "你无法在此玩家上使用此命令");
 							return;
 						}
 						string name = SplitString(p.GetDialogData(), "\n", 0);
 						string steamid = SplitString(p.GetDialogData(), "\n", 2);
 						string ip = SplitString(p.GetDialogData(), "\n", 3);
-						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::ContinueBan, "Ban player confirmation", "Player: " + name + "\nSteam ID: " + steamid + "\nIP Address: " + ip +"\nEnter ban reason:", "Continue", "Cancel", false);
+						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::ContinueBan, "封禁玩家确认", "玩家：" + name + "\nSteam ID: " + steamid + "\nIP 地址：" + ip +"\n输入封禁原因：", "确认", "取消", false);
 						break;
 					}
 					case 1:
 					{
 						if(GetAdminLevel(GetPanelPlayer(p)) >= GetAdminLevel(p) && GetPanelPlayer(p) != p) {
-							chat.SendPlayer(p, "You can't use it on this player");
+							chat.SendPlayer(p, "你无法在此玩家上使用此命令");
 							return;
 						}
-						p.ShowDialog(DIALOG_TYPE_MESSAGE, PlayerPanelControl::ConfirmKick, "Kick player?", "Are you sure to kick " + SplitString(p.GetDialogData(), "\n", 0) + "?", "Ban", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_MESSAGE, PlayerPanelControl::ConfirmKick, "踢出玩家？", "你确定要踢出玩家 " + SplitString(p.GetDialogData(), "\n", 0) + " 吗？", "踢出", "取消");
 						break;
 					}
 					case 2:
 					{
 						if(GetAdminLevel(GetPanelPlayer(p)) >= GetAdminLevel(p) && GetPanelPlayer(p) != p) {
-							chat.SendPlayer(p, "You can't use it on this player");
+							chat.SendPlayer(p, "你无法在此玩家上使用此命令");
 							return;
 						}
-						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::GiveRole, "Give role", "Enter role index:", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::GiveRole, "分配身份组", "输入身份组编号：", "确认", "取消");
 						break;
 					}
 					case 3:
 					{
-						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::GiveItem, "Give item", "Enter item name:", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::GiveItem, "分配物品", "输入物品名：", "确认", "取消");
 						break;
 					}
 					case 4:
 					{
-						p.ShowDialog(DIALOG_TYPE_MESSAGE, PlayerPanelControl::TeleportTo, "Teleport to", "Are you sure to teleport to this player?", "Yes", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_MESSAGE, PlayerPanelControl::TeleportTo, "传送到玩家处", "你确定要传送到玩家处吗？", "确认", "取消");
 						break;
 					}
 					case 5:
 					{
 						if(GetAdminLevel(GetPanelPlayer(p)) >= GetAdminLevel(p) && GetPanelPlayer(p) != p) {
-							chat.SendPlayer(p, "You can't use it on this player");
+							chat.SendPlayer(p, "你无法在此玩家上使用此命令");
 							return;
 						}
-						p.ShowDialog(DIALOG_TYPE_MESSAGE, PlayerPanelControl::TeleportMe, "Teleport me", "Are you sure to teleport this player?", "Yes", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_MESSAGE, PlayerPanelControl::TeleportMe, "传送到此处", "确定要将玩家传送到此处吗？", "确认", "取消");
 						break;
 					}
 					case 6:
 					{
 						if(GetAdminLevel(GetPanelPlayer(p)) >= GetAdminLevel(p) && GetPanelPlayer(p) != p) {
-							chat.SendPlayer(p, "You can't use it on this player");
+							chat.SendPlayer(p, "你无法在此玩家上使用此命令");
 							return;
 						}
-						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::SetSpeed, "Set speed", "Enter speed (0.0 is default)", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::SetSpeed, "设置速度", "输入速度（0.0为默认）", "确认", "取消");
 						break;
 					}
 					case 7:
 					{
 						if(GetAdminLevel(GetPanelPlayer(p)) >= GetAdminLevel(p) && GetPanelPlayer(p) != p) {
-							chat.SendPlayer(p, "You can't use it on this player");
+							chat.SendPlayer(p, "你无法在此玩家上使用此命令");
 							return;
 						}
-						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::SetModel, "Set model", "Enter model ID (1-16)", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::SetModel, "设置模型", "输入模型 ID (1-16)", "确认", "取消");
 						break;
 					}
 					case 8:
 					{
 						if(GetAdminLevel(GetPanelPlayer(p)) >= GetAdminLevel(p) && GetPanelPlayer(p) != p) {
-							chat.SendPlayer(p, "You can't use it on this player");
+							chat.SendPlayer(p, "你无法在此玩家上使用此命令");
 							return;
 						}
-						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::SetTexture, "Set texture", "Enter texture ID (1-30)", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::SetTexture, "设置纹理", "输入纹理 ID (1-30)", "确认", "取消");
 						break;
 					}
 					case 9:
 					{
 						if(GetAdminLevel(GetPanelPlayer(p)) >= GetAdminLevel(p) && GetPanelPlayer(p) != p) {
-							chat.SendPlayer(p, "You can't use it on this player");
+							chat.SendPlayer(p, "你无法在此玩家上使用此命令");
 							return;
 						}
-						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::SetSize, "Set size", "Enter size (0.0 is default)", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::SetSize, "设置大小", "输入大小（0.0为默认）", "确认", "取消");
 						break;
 					}
 					case 10:
 					{
 						if(GetAdminLevel(GetPanelPlayer(p)) >= GetAdminLevel(p)) {
-							chat.SendPlayer(p, "You can't use it on this player");
+							chat.SendPlayer(p, "你无法在此玩家上使用此命令");
 							return;
 						}
-						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::GiveAdmin, "Set admin access", "Enter admin level access (0 - remove)", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::GiveAdmin, "设置管理员权限", "输入管理员权限（0为移除）", "确认", "取消");
 						break;
 					}
 				}
@@ -351,7 +351,7 @@ namespace AdminPanel
 				string name = SplitString(p.GetDialogData(), "\n", 0);
 				string steamid = SplitString(p.GetDialogData(), "\n", 2);
 				string ip = SplitString(p.GetDialogData(), "\n", 3);
-				p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::ConfirmBan, "Ban player confirmation", "Player: " + name + "\nSteam ID: " + steamid + "\nIP Address: " + ip +"\nEnter ban time in minutes (0 - endless):", "Ban", "Cancel", false);
+				p.ShowDialog(DIALOG_TYPE_INPUT, PlayerPanelControl::ConfirmBan, "封禁玩家确认", "玩家：" + name + "\nSteam ID: " + steamid + "\nIP 地址：" + ip +"\n输入封禁时长（0=无限）：", "封禁", "取消", false);
 			}
 			
 			void ConfirmBan(Player p, bool result, string input, int item)
@@ -365,7 +365,7 @@ namespace AdminPanel
 				string IP = SplitString(p.GetDialogData(), "\n", 3);
 				GlobalBans.Push(SplitString(p.GetDialogData(), "\n", 2), IP, reason, minutes != 0 ? datetime().time + (60 * minutes) : 0);
 				GlobalBans.Save();
-				chat.Send("&colr[200 0 0]Administrator &r[]" + p.GetName() + "&r[] banned " + SplitString(p.GetDialogData(), "\n", 0) + " for " + minutes + " min. Reason: " + reason);
+				chat.Send("&colr[200 0 0]管理员 &r[]" + p.GetName() + "&r[] 已封禁 " + SplitString(p.GetDialogData(), "\n", 0) + "。时间：" + minutes + " 分钟。原因：" + reason);
 
 				for(int i = connPlayers.size() - 1; i >= 0; i--) {
 					if(connPlayers[i].GetIP() == IP) { 
@@ -381,7 +381,7 @@ namespace AdminPanel
 				if(GetPanelPlayer(p) != NULL)
 				{
 					GetPanelPlayer(p).Kick(CODE_KICKED);
-					chat.SendPlayer(p, "Success!");
+					chat.SendPlayer(p, "成功！");
 				}
 			}
 			
@@ -392,9 +392,9 @@ namespace AdminPanel
 					Role@ role = Roles::Find(parseInt(input));
 					if(@role != null) {
 						SetPlayerRole(GetPanelPlayer(p), role);
-						chat.SendPlayer(p, role.name + " has been successfully given to " + GetPanelPlayer(p).GetName());
+						chat.SendPlayer(p, role.name + " 已成功分配给 " + GetPanelPlayer(p).GetName());
 					}
-					else chat.SendPlayer(p, "Role doesn't exist!");
+					else chat.SendPlayer(p, "身份组不存在！");
 				}
 				ShowPlayer(p);
 			}
@@ -406,9 +406,9 @@ namespace AdminPanel
 					Items it = world.CreateItem(input);
 					if(it != NULL) {
 						it.SetPicker(GetPanelPlayer(p));
-						chat.SendPlayer(p, it.GetTemplateName() + " has been successfully given to " + GetPanelPlayer(p).GetName());
+						chat.SendPlayer(p, it.GetTemplateName() + " 已成功分配给 " + GetPanelPlayer(p).GetName());
 					}
-					else chat.SendPlayer(p, "Item doesn't exist!");
+					else chat.SendPlayer(p, "物品不存在！");
 				}
 				ShowPlayer(p);
 			}
@@ -419,7 +419,7 @@ namespace AdminPanel
 				if(GetPanelPlayer(p) != NULL) {
 					Entity destEnt = GetPanelPlayer(p).GetEntity();
 					p.SetPosition(destEnt.PositionX(), destEnt.PositionY(), destEnt.PositionZ(), GetPanelPlayer(p).GetRoom());
-					chat.SendPlayer(p, "Success!");
+					chat.SendPlayer(p, "成功！");
 				}
 			}
 			
@@ -429,7 +429,7 @@ namespace AdminPanel
 				if(GetPanelPlayer(p) != NULL) {
 					Entity destEnt = p.GetEntity();
 					GetPanelPlayer(p).SetPosition(destEnt.PositionX(), destEnt.PositionY(), destEnt.PositionZ(), p.GetRoom());
-					chat.SendPlayer(p, "Success!");
+					chat.SendPlayer(p, "成功！");
 				}
 			}
 			
@@ -438,7 +438,7 @@ namespace AdminPanel
 				if(!result) { ShowPlayer(p); return; }
 				if(input.length() > 0 && GetPanelPlayer(p) != NULL) {
 					GetPanelPlayer(p).SetSpeedMultiplier(parseFloat(input));
-					chat.SendPlayer(p, "Success!");
+					chat.SendPlayer(p, "成功！");
 					ShowPlayer(p);
 				}
 			}
@@ -448,7 +448,7 @@ namespace AdminPanel
 				if(!result) { ShowPlayer(p); return; }
 				if(input.length() > 0 && GetPanelPlayer(p) != NULL) {
 					GetPanelPlayer(p).SetModelSize(parseFloat(input));
-					chat.SendPlayer(p, "Success!");
+					chat.SendPlayer(p, "成功！");
 					ShowPlayer(p);
 				}
 			}
@@ -458,7 +458,7 @@ namespace AdminPanel
 				if(!result) { ShowPlayer(p); return; }
 				if(input.length() > 0 && GetPanelPlayer(p) != NULL) {
 					GetPanelPlayer(p).SetModel(parseInt(input));
-					chat.SendPlayer(p, "Success!");
+					chat.SendPlayer(p, "成功！");
 					ShowPlayer(p);
 				}
 			}
@@ -468,7 +468,7 @@ namespace AdminPanel
 				if(!result) { ShowPlayer(p); return; }
 				if(input.length() > 0 && GetPanelPlayer(p) != NULL) {
 					GetPanelPlayer(p).SetModelTexture(parseInt(input));
-					chat.SendPlayer(p, "Success!");
+					chat.SendPlayer(p, "成功！");
 					ShowPlayer(p);
 				}
 			}
@@ -478,12 +478,12 @@ namespace AdminPanel
 				if(!result) { ShowPlayer(p); return; }
 				if(input.length() > 0 && GetPanelPlayer(p) != NULL) {
 					if(GetAdminLevel(p) <= parseInt(input)) {
-						chat.SendPlayer(p, "You can't set this level");
+						chat.SendPlayer(p, "你无法设置该等级");
 						return;
 					}
 						
 					SetAdmin(parseInt(GetPanelPlayer(p).GetSteamID()), parseInt(input), true);
-					chat.SendPlayer(p, "You set " + parseInt(input) + " administrator level for " + GetPanelPlayer(p).GetName());
+					chat.SendPlayer(p, "你将 " + parseInt(input) + " 级管理员权限分配给了 " + GetPanelPlayer(p).GetName());
 				}
 			}
 		}
@@ -492,7 +492,7 @@ namespace AdminPanel
 		{
 			void ShowControl(Player p)
 			{
-				p.ShowDialog(DIALOG_TYPE_LIST, PlayersControl, "Players control", "Teleport everyone to you\nTeleport player to player\nUnban player\nUse players list to control (P)" , "Select", "Back");
+				p.ShowDialog(DIALOG_TYPE_LIST, PlayersControl, "玩家控制", "将所有人传送到此处\n将玩家传送到玩家处\n解封玩家\n使用玩家列表控制 (P)" , "选择", "返回");
 			}
 			
 			void PlayersControl(Player p, bool result, string input, int item)
@@ -501,13 +501,13 @@ namespace AdminPanel
 				
 				switch(item) {
 					case 0: 
-						p.ShowDialog(DIALOG_TYPE_MESSAGE, TeleportEveryone, "Teleport everyone", "Are you really sure to teleport everyone?", "Yes", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_MESSAGE, TeleportEveryone, "将所有人传送到此处", "你确定要将所有人传送至此处吗？", "确认", "取消");
 						break;
 					case 1:
-						p.ShowDialog(DIALOG_TYPE_INPUT, TeleportPTOP, "Teleport player to player", "Enter player index and player index. Example [1 2]", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, TeleportPTOP, "n将玩家传送到玩家处", "输入玩家编号（例如[1 2]）", "确认", "取消");
 						break;
 					case 2:
-						p.ShowDialog(DIALOG_TYPE_INPUT, Unban, "Unban player", "Enter IP or SteamID", "Unban", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, Unban, "解封玩家", "输入 IP 或 SteamID", "解封", "取消");
 						break;
 				}
 			}
@@ -519,7 +519,7 @@ namespace AdminPanel
 					Entity destEnt = p.GetEntity();
 					connPlayers[i].SetPosition(destEnt.PositionX(), destEnt.PositionY(), destEnt.PositionZ(), p.GetRoom());
 				}
-				chat.SendPlayer(p, "Success!");
+				chat.SendPlayer(p, "成功！");
 			}
 			
 			void TeleportPTOP(Player p, bool result, string input, int item)
@@ -538,7 +538,7 @@ namespace AdminPanel
 									Entity destEnt = dest2.GetEntity();
 									dest.SetPosition(destEnt.PositionX(), destEnt.PositionY(), destEnt.PositionZ(), dest2.GetRoom());
 						
-									chat.SendPlayer(p, dest.GetName() + " has been successfully teleported to " + dest2.GetName());
+									chat.SendPlayer(p, dest.GetName() + " 已成功传送至 " + dest2.GetName());
 									ShowControl(p);
 								}
 							}
@@ -548,17 +548,17 @@ namespace AdminPanel
 				}
 				
 				ShowControl(p);
-				chat.SendPlayer(p, "Can't find player or role");
+				chat.SendPlayer(p, "找不到玩家或身份组");
 			}
 			
 			void Unban(Player p, bool result, string input, int item)
 			{
 				if(!result) { ShowControl(p); return; }
 				if(input.findFirst(".") >= 0 ? GlobalBans.Remove("", input) : GlobalBans.Remove(input, "")) {
-					chat.SendPlayer(p, "Player successfully unbanned");
+					chat.SendPlayer(p, "玩家已解封");
 					GlobalBans.Save();
 				}
-				else chat.SendPlayer(p, "Can't find banned player");
+				else chat.SendPlayer(p, "找不到封禁玩家");
 				ShowControl(p);
 			}
 		}
@@ -567,7 +567,7 @@ namespace AdminPanel
 		{
 			void ShowControl(Player p)
 			{
-				p.ShowDialog(DIALOG_TYPE_LIST, RoundControl, "Round control", "Start round\nRestart round\nSet lobby timer\nSet round timer\nSpawn wave\nAnnounce" , "Select", "Back");
+				p.ShowDialog(DIALOG_TYPE_LIST, RoundControl, "回合控制", "开始回合\n重启回合\n设置大厅倒计时\n设置回合时间\n刷新波数\n广播" , "选择", "返回");
 			}
 			
 			void RoundControl(Player p, bool result, string input, int item)
@@ -576,22 +576,22 @@ namespace AdminPanel
 				switch(item) 
 				{
 					case 0:
-						p.ShowDialog(DIALOG_TYPE_MESSAGE, StartRound, "Start?", "Are you really sure to start the round?", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_MESSAGE, StartRound, "开始？", "确定要开始本回合？", "确认", "取消");
 						break;
 					case 1:
-						p.ShowDialog(DIALOG_TYPE_MESSAGE, RestartRound, "Restart round", "Are you really sure to restart the round?", "Yes", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_MESSAGE, RestartRound, "重启回合", "确定要重启本回合？", "确认", "取消");
 						break;
 					case 2:
-						p.ShowDialog(DIALOG_TYPE_INPUT, SetLobbyTimer, "Set lobby timer", "Enter lobby seconds.", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, SetLobbyTimer, "设置大厅倒计时", "输入秒数", "确认", "取消");
 						break;
 					case 3:
-						p.ShowDialog(DIALOG_TYPE_INPUT, SetRoundTimer, "Set round timer", "Enter round seconds", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, SetRoundTimer, "设置回合时间", "输入秒数", "确认", "取消");
 						break;
 					case 4:
 						Round::SpawnWave();
 						break;
 					case 5:
-						p.ShowDialog(DIALOG_TYPE_INPUT, Announce, "Announce", "Enter message for announce:", "Enter", "Cancel");
+						p.ShowDialog(DIALOG_TYPE_INPUT, Announce, "广播", "输入广播内容：", "确认", "取消");
 						break;
 				}
 			}
@@ -613,7 +613,7 @@ namespace AdminPanel
 				if(!result) { ShowControl(p); return; }
 				if(input.length() > 0) {
 					Lobby::SetTimer(parseInt(input));
-					chat.SendPlayer(p, "Success!");
+					chat.SendPlayer(p, "成功！");
 				}
 			}
 			
@@ -626,7 +626,7 @@ namespace AdminPanel
 			void Announce(Player p, bool result, string input, int item)
 			{
 				if(!result || input == "") { ShowControl(p); return; }
-				chat.Send("[Server]: " + input);
+				chat.Send("[服务器]：" + input);
 			}
 		}
 		
@@ -634,14 +634,14 @@ namespace AdminPanel
 		{
 			void ShowControl(Player p)
 			{
-				p.ShowDialog(DIALOG_TYPE_LIST, ServerControl, "Server control", "Restart server\n" , "Select", "Back");
+				p.ShowDialog(DIALOG_TYPE_LIST, ServerControl, "服务器控制", "Restart server\n" , "选择", "返回");
 			}
 			
 			void ServerControl(Player p, bool result, string input, int item)
 			{
 				if(!result) { Show(p); return; }
 				if(item == 0) {
-					p.ShowDialog(DIALOG_TYPE_MESSAGE, RestartServer, "Restart server", "Are you really sure to restart the server?", "Yes", "Cancel");
+					p.ShowDialog(DIALOG_TYPE_MESSAGE, RestartServer, "重启服务器", "你确定要重启服务器吗？", "确认", "取消");
 				}
 			}
 			
@@ -656,12 +656,12 @@ namespace AdminPanel
 		{
 			void ShowControl(Player p)
 			{
-				p.ShowDialog(DIALOG_TYPE_LIST, AdminControl, "Admin control", "Set admin access", "OK");
+				p.ShowDialog(DIALOG_TYPE_LIST, AdminControl, "管理员控制", "设置管理员权限", "确认");
 			}
 			
 			void AdminControl(Player p, bool result, string input, int item)
 			{
-				if(result) p.ShowDialog(DIALOG_TYPE_MESSAGE, 0, "Notification", "Double click on player in players list to set admin access.", "Ok");
+				if(result) p.ShowDialog(DIALOG_TYPE_MESSAGE, 0, "提醒", "双击玩家列表里的玩家以设置权限", "确认");
 				else Show(p);
 			}
 		}
