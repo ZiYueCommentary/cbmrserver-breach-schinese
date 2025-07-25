@@ -634,7 +634,7 @@ namespace AdminPanel
 		{
 			void ShowControl(Player p)
 			{
-				p.ShowDialog(DIALOG_TYPE_LIST, ServerControl, "服务器控制", "Restart server\n" , "选择", "返回");
+				p.ShowDialog(DIALOG_TYPE_LIST, ServerControl, "服务器控制", "重启服务器\n" , "选择", "返回");
 			}
 			
 			void ServerControl(Player p, bool result, string input, int item)
